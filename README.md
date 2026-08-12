@@ -120,17 +120,16 @@ SMOTE oversampling	Logistic Regression, Random Forest, XGBoost
 
 Six configurations total, compared by PR-AUC — not accuracy or ROC-AUC, both of which look misleadingly good under 0.17% positive class rate (a model that predicts "not fraud" always scores 99.83% accuracy).
 
-Talking about this project in interviews
+## Design decisions
 
-Be ready to explain, in your own words:
-
-Why stratified splitting matters here
-Why you compared class-weighting vs. SMOTE rather than picking one blindly
-Why the final threshold isn't 0.5, and how you derived it
-Why the scaler is fit only on train data and reused (not refit) on test — this is tested explicitly in test_preprocess.py
-What you'd monitor if this were in production
-Possible extensions
-Wrap outputs/best_model.joblib in a FastAPI /predict endpoint
-Add SHAP values to explain individual fraud predictions
-Add MLflow to track all 6 runs instead of a flat CSV
-Add tests for models.py and evaluate.py too
+- **Stratified split**: without it, a random split can leave train/test with
+  meaningfully different fraud rates, making evaluation misleading.
+- **Class-weighting vs. SMOTE**: both are compared rather than assuming one
+  wins, since the better approach depends on the model and can only be
+  answered empirically.
+- **Threshold ≠ 0.5**: the default cutoff ignores the real cost asymmetry
+  between missed fraud and false alarms, so the threshold is tuned against
+  the 10:1 cost ratio instead.
+- **Scaler fit only on train, reused on test**: refitting on test data would
+  leak test-set statistics into preprocessing — a subtle but common bug,
+  which is why it's covered explicitly in `test_preprocess.py`.
