@@ -13,10 +13,7 @@ from config import OUTPUT_DIR, RANDOM_STATE
 
 
 def get_model_configs():
-    """Returns {name: (model_or_None, needs_smote)}.
-    XGBoost's class-weighted variant is built dynamically in
-    train_and_evaluate() once the train-set imbalance ratio is known.
-    """
+    
     return {
         "LogReg (class_weight)": (
             LogisticRegression(class_weight="balanced", max_iter=1000, random_state=RANDOM_STATE),
