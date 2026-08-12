@@ -1,12 +1,3 @@
-"""Unit tests for preprocess.py.
-
-Run with: pytest tests/
-
-These don't need the real Kaggle dataset — they build small synthetic
-DataFrames shaped like it, which is exactly what makes preprocessing logic
-testable in isolation from data availability.
-"""
-
 import sys
 from pathlib import Path
 
@@ -14,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-# Allow running `pytest` from the project root without packaging setup.
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from preprocess import preprocess_and_split, scale_amount_and_time
@@ -47,8 +38,7 @@ class TestScaleAmountAndTime:
         X = df.drop(columns=["Class"])
         _, fitted_scaler = scale_amount_and_time(X)
 
-        # A different dataset, scaled with the *already-fitted* scaler,
-        # should not re-center to zero mean — it must reuse train-set stats.
+       
         df2 = make_fake_df(seed=2)
         X2 = df2.drop(columns=["Class"])
         X2_scaled, scaler_out = scale_amount_and_time(X2, scaler=fitted_scaler)
@@ -70,7 +60,7 @@ class TestPreprocessAndSplit:
 
         train_rate = y_train.mean()
         test_rate = y_test.mean()
-        # Stratified split should keep fraud rate within a small tolerance
+     
         assert abs(train_rate - test_rate) < 0.02
 
     def test_split_sizes(self):
