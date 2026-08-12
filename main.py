@@ -1,11 +1,3 @@
-"""
-Credit Card Fraud Detection — Junior ML Engineer Portfolio Project
-=====================================================================
-Entry point. Run this file: `python main.py`
-
-See README.md for dataset download instructions and project write-up.
-"""
-
 import json
 
 import joblib
